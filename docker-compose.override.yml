@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  knightsdb:
+    container_name: knightsdb
+    restart: always
+    ports:
+     - "27017:27017"
+    volumes:
+     - mongo_data:/data/db
+
+  knightschallengeapi:
+    environment:
+     - ASPNETCORE_ENVIRONMENT=Development
+     - "KnightsDataSettings:ConnectionString=mongodb://knightsdb:27017"
+     - "HeroesDataSettings:ConnectionString=mongodb://knightsdb:27017"
+    depends_on:
+     - knightsdb
+    ports:
+     - "8192:80"
